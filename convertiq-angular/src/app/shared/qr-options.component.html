@@ -1,0 +1,43 @@
+<div class="card appearance-card">
+  <div class="card-head">
+    <h3><i class="fa-solid fa-sliders"></i> Apparence</h3>
+  </div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label for="appear-size">Taille d'export</label>
+      <select id="appear-size" [value]="engine.options().size" (change)="setSize($any($event.target).value)">
+        @for (s of sizes; track s) {
+          <option [value]="s" [selected]="engine.options().size === s">{{ s }} × {{ s }}</option>
+        }
+      </select>
+    </div>
+    <div class="field">
+      <label for="appear-ec">Correction d'erreur</label>
+      <select id="appear-ec" [value]="engine.options().ec" (change)="setEc($any($event.target).value)">
+        @for (l of ecLevels; track l.value) {
+          <option [value]="l.value" [selected]="engine.options().ec === l.value">{{ l.label }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Couleurs</label>
+    <div class="color-row">
+      <input type="color" [value]="engine.options().dark" (change)="setDark($any($event.target).value)" aria-label="Couleur du premier plan">
+      <span>Premier plan</span>
+      <input type="color" [value]="engine.options().light" (change)="setLight($any($event.target).value)" aria-label="Couleur de l'arrière-plan">
+      <span>Arrière-plan</span>
+    </div>
+    <div class="presets">
+      @for (c of presets; track c) {
+        <div
+          class="preset-swatch"
+          [class.active]="engine.options().dark.toLowerCase() === c.toLowerCase()"
+          [style.background]="c"
+          (click)="setDark(c)"></div>
+      }
+    </div>
+  </div>
+</div>

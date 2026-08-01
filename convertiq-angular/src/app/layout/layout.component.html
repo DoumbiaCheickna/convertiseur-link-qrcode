@@ -1,0 +1,62 @@
+<div class="bg-blob bg-blob-1"></div>
+<div class="bg-blob bg-blob-2"></div>
+
+<aside class="sidebar" [class.open]="menuOpen()">
+  <div class="sidebar-head">
+    <div class="logo">
+      <div class="logo-mark"><i class="fa-solid fa-qrcode"></i></div>
+      <div class="logo-text">Convert<span>IQ</span><em>PRO</em></div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    @for (group of groups; track group.title) {
+      <div class="nav-group">{{ group.title }}</div>
+      @for (item of group.items; track item.id) {
+        <a class="nav-item" [routerLink]="'/' + item.id" routerLinkActive="active">
+          <i class="fa-solid {{ item.icon }}"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    }
+  </nav>
+
+  <div class="sidebar-foot">
+    <div class="sidebar-foot-card">
+      <i class="fa-solid fa-shield-halved"></i>
+      <div>
+        <p>100% gratuit</p>
+        <span>Toutes vos données restent sur votre appareil</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="sidebar-backdrop" [class.show]="menuOpen()" (click)="menuOpen.set(false)"></div>
+
+<header class="topbar">
+  <button class="icon-btn menu-btn" (click)="toggleMenu()" title="Menu" aria-label="Menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <div class="topbar-title">
+    <h2>{{ title() }}</h2>
+    <p>{{ sub() }}</p>
+  </div>
+  <div class="topbar-actions">
+    <button
+      class="icon-btn"
+      (click)="theme.toggle()"
+      [attr.title]="theme.theme() === 'dark' ? 'Mode clair' : 'Mode sombre'"
+      aria-label="Changer de thème">
+      <i class="fa-solid" [class.fa-sun]="theme.theme() === 'dark'" [class.fa-moon]="theme.theme() !== 'dark'"></i>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <div class="container-inner">
+    <router-outlet />
+  </div>
+</main>
+
+<app-toast-container />

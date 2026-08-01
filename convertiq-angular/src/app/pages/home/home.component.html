@@ -1,0 +1,100 @@
+<section class="hero">
+  <span class="hero-badge"><i class="fa-solid fa-shield-halved"></i> 100% gratuit — sans compte</span>
+  <h1>Transformez votre lien en<br /><span class="grad">QR code</span> professionnel</h1>
+  <p class="hero-sub">
+    Convertissez URLs, textes, Wi-Fi, contacts et bien plus en QR codes
+    scannables, téléchargeables en PNG ou SVG, le tout sans connexion.
+  </p>
+  <div class="hero-actions">
+    <a class="btn btn-primary btn-lg" routerLink="/url">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Créer un QR code
+    </a>
+    <a class="btn btn-ghost btn-lg" routerLink="/scanner">
+      <i class="fa-solid fa-camera"></i> Scanner un QR
+    </a>
+  </div>
+  <div class="hero-stats">
+    <div><strong>7</strong><span>types de contenus</span></div>
+    <div><strong>2</strong><span>formats d'export</span></div>
+    <div><strong>0</strong><span>données envoyées</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Générer</h2>
+    <p>Choisissez le type de contenu à convertir</p>
+  </div>
+  <div class="tool-grid">
+    @for (tool of groups[0].items; track tool.id) {
+      <a class="tool-card" routerLink="/{{ tool.id }}">
+        <div class="tool-icon"><i class="fa-solid {{ tool.icon }}"></i></div>
+        <div class="tool-body">
+          <strong>{{ tool.label }}</strong>
+          <span>Créer un QR code {{ tool.label.toLowerCase() }}</span>
+        </div>
+        <i class="fa-solid fa-chevron-right tool-arrow"></i>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Décoder & Gérer</h2>
+    <p>Scannez un QR existant ou pilotez vos créations</p>
+  </div>
+  <div class="tool-grid">
+    @for (tool of groups[1].items; track tool.id) {
+      <a class="tool-card" routerLink="/{{ tool.id }}">
+        <div class="tool-icon"><i class="fa-solid {{ tool.icon }}"></i></div>
+        <div class="tool-body">
+          <strong>{{ tool.label }}</strong>
+          <span>Décoder un QR code depuis la caméra ou une image</span>
+        </div>
+        <i class="fa-solid fa-chevron-right tool-arrow"></i>
+      </a>
+    }
+    @for (tool of groups[2].items; track tool.id) {
+      <a class="tool-card" routerLink="/{{ tool.id }}">
+        <div class="tool-icon"><i class="fa-solid {{ tool.icon }}"></i></div>
+        <div class="tool-body">
+          <strong>{{ tool.label }}</strong>
+          <span>{{ tool.id === 'bulk' ? 'Générez plusieurs QR codes à la fois' : 'Retrouvez tous vos QR codes générés' }}</span>
+        </div>
+        <i class="fa-solid fa-chevron-right tool-arrow"></i>
+      </a>
+    }
+  </div>
+</section>
+
+@if (history.entries().length) {
+  <section class="section">
+    <div class="section-head">
+      <h2>Reprendre</h2>
+      <p>Actions rapides sur votre dernier QR code</p>
+    </div>
+    <div class="quick-row">
+      <button class="btn btn-ghost" (click)="copyLast()"><i class="fa-solid fa-copy"></i> Copier le contenu</button>
+      <button class="btn btn-ghost" (click)="redoLast()"><i class="fa-solid fa-download"></i> Re-télécharger</button>
+    </div>
+  </section>
+}
+
+<section class="section features">
+  <div class="feature">
+    <i class="fa-solid fa-user-shield"></i>
+    <h3>Vos données restent privées</h3>
+    <p>Tout est traité localement dans votre navigateur. Aucune donnée ne quitte votre appareil.</p>
+  </div>
+  <div class="feature">
+    <i class="fa-solid fa-bolt"></i>
+    <h3>Rapide & instantané</h3>
+    <p>Générez un QR code en quelques secondes, sans compte ni file d'attente.</p>
+  </div>
+  <div class="feature">
+    <i class="fa-solid fa-arrows-rotate"></i>
+    <h3>PNG & SVG</h3>
+    <p>Exportez vos QR codes en haute qualité, pixel ou vectoriel, prêt pour l'impression.</p>
+  </div>
+</section>

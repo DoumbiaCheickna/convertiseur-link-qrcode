@@ -1,0 +1,33 @@
+<div class="card preview-card">
+  <div class="card-head">
+    <h3><i class="fa-solid fa-qrcode"></i> Aperçu du QR code</h3>
+    @if (preview) {
+      <span class="badge-pill"><i class="fa-solid {{ typeIcon }}"></i> {{ typeLabel }}</span>
+    }
+  </div>
+
+  @if (!preview) {
+    <div class="preview-empty">
+      <i class="fa-solid fa-qrcode"></i>
+      <p>Votre QR code apparaîtra ici</p>
+      <span>Remplissez le formulaire pour commencer</span>
+    </div>
+  } @else {
+    <div class="preview-body">
+      <div class="qr-frame">
+        <canvas #canvas width="480" height="480"></canvas>
+      </div>
+      <div class="preview-meta">
+        <strong>{{ preview!.label }}</strong>
+        <span>{{ preview!.snippet }}</span>
+      </div>
+      <div class="preview-actions">
+        <button class="btn btn-primary" (click)="downloadPng()"><i class="fa-solid fa-download"></i> PNG</button>
+        <button class="btn btn-ghost" (click)="downloadSvg()"><i class="fa-solid fa-vector-square"></i> SVG</button>
+        <button class="btn btn-ghost" (click)="copy()"><i class="fa-solid fa-copy"></i> Copier</button>
+        <button class="btn btn-ghost" (click)="share()"><i class="fa-solid fa-share-nodes"></i> Partager</button>
+      </div>
+      <p class="preview-hint">Sans connexion nécessaire — votre QR code est prêt</p>
+    </div>
+  }
+</div>

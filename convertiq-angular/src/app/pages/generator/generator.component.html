@@ -1,0 +1,117 @@
+<div class="gen-layout">
+  <div class="gen-left">
+    <div class="card form-card">
+      <div class="card-head">
+        <h3><i class="fa-solid {{ config.icon }}"></i> {{ config.title }}</h3>
+      </div>
+
+      <div class="form-body">
+        @for (field of config.fields; track field.key) {
+          @if (!field.visible || field.visible(values())) {
+            <div class="field">
+              @switch (field.type) {
+                @case ('text') {
+                  <label [for]="field.key">{{ field.label }}</label>
+                  <div class="input-icon">
+                    @if (field.icon) {
+                      <i class="fa-solid {{ field.icon }}"></i>
+                    }
+                    <input
+                      [id]="field.key"
+                      type="text"
+                      [placeholder]="field.placeholder ?? ''"
+                      [value]="values()[field.key]"
+                      (input)="onValueChange(field.key, $event)" />
+                  </div>
+                }
+                @case ('number') {
+                  <label [for]="field.key">{{ field.label }}</label>
+                  <div class="input-icon">
+                    @if (field.icon) {
+                      <i class="fa-solid {{ field.icon }}"></i>
+                    }
+                    <input
+                      [id]="field.key"
+                      type="number"
+                      step="any"
+                      [placeholder]="field.placeholder ?? ''"
+                      [value]="values()[field.key]"
+                      (input)="onValueChange(field.key, $event)" />
+                  </div>
+                }
+                @case ('textarea') {
+                  <label [for]="field.key">{{ field.label }}</label>
+                  <textarea
+                    [id]="field.key"
+                    [rows]="field.rows ?? 5"
+                    [placeholder]="field.placeholder ?? ''"
+                    [value]="values()[field.key]"
+                    (input)="onValueChange(field.key, $event)"></textarea>
+                  @if (field.counter) {
+                    <p class="hint">{{ counterText() }}</p>
+                  }
+                }
+                @case ('select') {
+                  <label [for]="field.key">{{ field.label }}</label>
+                  <select [id]="field.key" [value]="values()[field.key]" (change)="onValueChange(field.key, $event)">
+                    @for (opt of field.options ?? []; track opt.value) {
+                      <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                  </select>
+                }
+                @case ('checkbox') {
+                  <label class="check">
+                    <input type="checkbox" [checked]="!!values()[field.key]" (change)="onValueChange(field.key, $event)" />
+                    <span class="check-box"></span>
+                    {{ field.label }}
+                  </label>
+                }
+                @case ('segmented') {
+                  <label>{{ field.label }}</label>
+                  <div class="segmented">
+                    @for (opt of field.options ?? []; track opt.value) {
+                      <button
+                        type="button"
+                        class="seg-btn"
+                        [class.active]="values()[field.key] === opt.value"
+                        (click)="setValue(field.key, opt.value)">
+                        @if (opt.icon) {
+                          <i class="fa-solid {{ opt.icon }}"></i>
+                        }
+                        {{ opt.label }}
+                      </button>
+                    }
+                  </div>
+                }
+                @case ('chips') {
+                  <label>Essayez un exemple</label>
+                  <div class="chips">
+                    @for (opt of field.options ?? []; track opt.value) {
+                      <button type="button" class="chip" (click)="setValue('input', opt.value)">{{ opt.label }}</button>
+                    }
+                  </div>
+                }
+              }
+
+              @if (field.hint) {
+                <p class="hint">{{ field.hint }}</p>
+              }
+            </div>
+          }
+        }
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary btn-block" (click)="generate()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Générer le QR code
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <app-qr-options />
+  </div>
+
+  <div class="gen-right">
+    <app-qr-preview />
+  </div>
+</div>

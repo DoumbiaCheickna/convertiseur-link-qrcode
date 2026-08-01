@@ -1,0 +1,72 @@
+<div class="card">
+  <div class="card-head">
+    <h3><i class="fa-solid fa-camera"></i> Scanner un QR code</h3>
+    <div class="segmented">
+      <button type="button" class="seg-btn" [class.active]="tab() === 'camera'" (click)="setTab('camera')">
+        <i class="fa-solid fa-camera"></i> Caméra
+      </button>
+      <button type="button" class="seg-btn" [class.active]="tab() === 'image'" (click)="setTab('image')">
+        <i class="fa-solid fa-image"></i> Image
+      </button>
+    </div>
+  </div>
+
+  <div class="scanner-body">
+    @if (tab() === 'camera') {
+      <div class="camera-box">
+        <video #video muted playsinline></video>
+        <div class="camera-mask"></div>
+        @if (!scanning()) {
+          <button class="btn btn-primary scan-start" (click)="startCamera()">
+            <i class="fa-solid fa-video"></i> Activer la caméra
+          </button>
+        } @else {
+          <button class="btn btn-ghost scan-stop" (click)="stopCamera()">
+            <i class="fa-solid fa-ban"></i> Arrêter
+          </button>
+        }
+      </div>
+    } @else {
+      <div
+        class="dropzone"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <p>Glissez une image ici ou</p>
+        <label class="btn btn-primary">
+          <i class="fa-solid fa-image"></i> Choisir une image
+          <input type="file" accept="image/*" hidden (change)="onFileChange($event)" />
+        </label>
+        <span class="hint">PNG, JPG, WEBP — collez aussi avec Ctrl+V</span>
+      </div>
+    }
+
+    @if (busy()) {
+      <div class="busy"><i class="fa-solid fa-spinner fa-spin"></i> Analyse en cours…</div>
+    }
+
+    @if (result(); as r) {
+      <div class="scan-result">
+        <div class="scan-result-head">
+          <i class="fa-solid {{ typeIcon }} result-icon"></i>
+          <div class="scan-result-title">
+            <strong>{{ typeLabel }}</strong>
+            <span>QR code détecté avec succès</span>
+          </div>
+        </div>
+        <p class="scan-value">{{ r.data }}</p>
+        <div class="scan-actions">
+          @if (canOpen) {
+            <button class="btn btn-primary" (click)="openResult()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir</button>
+          }
+          @if (canReuse) {
+            <button class="btn btn-ghost" (click)="useResult()"><i class="fa-solid fa-repeat"></i> Réutiliser</button>
+          }
+          <button class="btn btn-ghost" (click)="copyResult()"><i class="fa-solid fa-copy"></i> Copier</button>
+          <button class="btn btn-ghost" (click)="saveResult()"><i class="fa-solid fa-bookmark"></i> Enregistrer</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

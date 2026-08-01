@@ -1,0 +1,90 @@
+<div class="card">
+  <div class="card-head">
+    <h3><i class="fa-solid fa-layer-group"></i> Conversion en masse</h3>
+  </div>
+
+  <div class="bulk-body">
+    <div class="field">
+      <label>Type de QR code</label>
+      <div class="segmented">
+        <button type="button" class="seg-btn" [class.active]="toolId() === 'url'" (click)="setTool('url')">
+          <i class="fa-solid fa-link"></i> URLs
+        </button>
+        <button type="button" class="seg-btn" [class.active]="toolId() === 'text'" (click)="setTool('text')">
+          <i class="fa-solid fa-font"></i> Texte
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="bulk-input">Vos {{ config.title.toLowerCase() }} (un par ligne)</label>
+      <textarea
+        id="bulk-input"
+        rows="9"
+        placeholder="https://exemple.com&#10;https://autremple.com&#10;https://encore-un-exemple.fr"
+        [value]="raw()"
+        (input)="onRawChange($event)"></textarea>
+      <p class="hint">
+        Les URLs sans préfixe sont automatiquement complétées par https:// — {{ validRows.length }} / {{ rows().length }} valides
+      </p>
+    </div>
+
+    <div class="bulk-actions">
+      <button class="btn btn-primary" (click)="downloadZip()" [disabled]="!validRows.length || busy()">
+        @if (busy()) {
+          <i class="fa-solid fa-spinner fa-spin"></i> Génération…
+        } @else {
+          <i class="fa-solid fa-file-zipper"></i> Tout télécharger (ZIP)
+        }
+      </button>
+      <button class="btn btn-ghost" (click)="addToHistory()" [disabled]="!validRows.length">
+        <i class="fa-solid fa-bookmark"></i> Ajouter à l'historique
+      </button>
+      <button class="btn btn-ghost" (click)="clearAll()">
+        <i class="fa-solid fa-trash"></i> Effacer
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (rows().length) {
+  <div class="card">
+    <div class="card-head">
+      <h3><i class="fa-solid fa-table"></i> Aperçu</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Contenu</th>
+            <th>Statut</th>
+            <th class="th-actions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.id) {
+            <tr>
+              <td class="td-idx">{{ row.id }}</td>
+              <td class="td-content">{{ row.input }}</td>
+              <td>
+                @if (row.ok) {
+                  <span class="badge badge-ok"><i class="fa-solid fa-circle-check"></i> Prêt</span>
+                } @else {
+                  <span class="badge badge-err"><i class="fa-solid fa-circle-exclamation"></i> {{ row.error }}</span>
+                }
+              </td>
+              <td class="td-actions">
+                @if (row.ok) {
+                  <button class="icon-btn" (click)="downloadOne(row)" title="Télécharger">
+                    <i class="fa-solid fa-download"></i>
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}
